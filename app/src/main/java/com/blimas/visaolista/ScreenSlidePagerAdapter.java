@@ -14,16 +14,19 @@ public class ScreenSlidePagerAdapter extends FragmentStateAdapter {
 
     private Context mContext ;
     private List<Book> mFrags = new ArrayList<>();
+    private  Integer qtdColunas;
 
-    public ScreenSlidePagerAdapter(Context context, FragmentActivity fa, List<Book> lista) {
+    public ScreenSlidePagerAdapter(Context context, FragmentActivity fa, List<Book> lista, int qtdColunas) {
         super(fa);
         this.mContext = context;
         this.mFrags = lista;
+        this.qtdColunas = qtdColunas;
+
     }
 
     @Override
     public Fragment createFragment(int position) {
-        return new ScreenSlidePageFragment(mContext, mFrags);
+        return new ScreenSlidePageFragment(mContext, mFrags, qtdColunas);
     }
 
     @Override

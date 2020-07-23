@@ -5,26 +5,26 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScreenSlidePageFragment extends Fragment {
+public class ScreenSlidePageFragment extends Fragment  {
 
     private List<Book>mFrags = new ArrayList<>();
     private Context mContext ;
+    private ItemTouchHelper touchHelper;
+    private  Integer qtdColunas;
 
-    public ScreenSlidePageFragment(Context context, List<Book> mFrags) {
+    public ScreenSlidePageFragment(Context context, List<Book> mFrags, int qtdColunas) {
         this.mContext = context;
         this.mFrags = mFrags;
+        this.qtdColunas = qtdColunas;
     }
 
 
@@ -43,9 +43,14 @@ public class ScreenSlidePageFragment extends Fragment {
 
         MyAdapter adapter = new MyAdapter(mContext, mFrags);
 
+        ItemTouchHelper.Callback callback =
+                new ItemCallBackToMove(adapter);
+        touchHelper  = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+
         recyclerView.setAdapter(adapter);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(mContext,1));
+        recyclerView.setLayoutManager(new GridLayoutManager(mContext,this.qtdColunas));
 
         return view;
 

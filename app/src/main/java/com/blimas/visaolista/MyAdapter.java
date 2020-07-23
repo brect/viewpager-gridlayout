@@ -1,7 +1,7 @@
 package com.blimas.visaolista;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +11,10 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements ItemCallBackToMove.ItemTouchHelperInterface {
 
 
     private Context mContext ;
@@ -40,12 +41,45 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.tv_book_title.setText(mData.get(position).getTitle());
         holder.img_book_thumbnail.setImageResource(mData.get(position).getThumbnail());
 
+
+
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
     }
+
+    @Override
+    public void onItemRowMoved(int fromPosition, int toPosition) {
+
+        if (fromPosition == toPosition){
+            return;
+        }
+
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mData, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mData, i, i - 1);
+            }
+        }
+
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemRowSelected(MyViewHolder myViewHolder) {
+        myViewHolder.cardView.setBackgroundColor(Color.GRAY);
+    }
+
+    @Override
+    public void onItemRowClear(MyViewHolder myViewHolder) {
+        myViewHolder.cardView.setBackgroundColor(Color.WHITE);
+    }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
